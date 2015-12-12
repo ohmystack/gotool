@@ -57,9 +57,9 @@ gotool::activate() {
     try_parse_godeps_repo=${work_dir%Godeps/_workspace}
     # Check if it is under Godeps
     if [ ${#work_dir} != ${#try_parse_godeps_repo} ]; then
-      set_ps1 '($(basename $try_parse_godeps_repo))' 191
+      set_ps1 "($(basename $try_parse_godeps_repo))" 191
     else
-      set_ps1 '($(basename $(pwd)))' 112
+      set_ps1 "($(basename $(pwd)))" 112
     fi
   else
     echo "Invalid Go workspace. Cannot find 'src' directory here." >&2
