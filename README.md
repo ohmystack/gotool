@@ -6,7 +6,7 @@ by ohmystack (jiangjun1990@gmail.com)
 
 It is greatly inspired by the `virtualenv` from Python.
 
-But here is only a small script. Cool, Right?
+But here is only a small script. Cool, right?
 
 Feature
 =======
@@ -34,33 +34,33 @@ Golang Developer Tool
 Usage: source gotool [a|activate] [d|deactivate|exit]
 ```
 
+#### Activate
+
 Activate current path, adding it into `$GOPATH` and its `./bin` into `$PATH`.
 
 ```bash
-$ cd <your-workspace>
-$ source gotool activate
+cd <your-workspace>
+source gotool activate
+
 # OR use 'a' for short
-$ source gotool a
-
-# Done!
-# You will see a prefix, the name of this directory, in front of your PS1.
-# If the path is under `Godeps/_workspace/`, the prefix will be the project name.
-
-# Then, you can check
-(your-workspace) $ echo $GOPATH
-# You will see current path in front of your global GOPATH
-# <your-work-path>:$_OLD_GOLANG_GOPATH
-(your-workspace) $ echo $PATH
-# You will see the './bin' has been added into $PATH
-# <your-work-path>/bin:$_OLD_GOLANG_PATH
+source gotool a
 ```
 
-Deactivate
+Done!
+
+You will see a prefix, the name of this directory, in front of your PS1.
+If the path is under `Godeps/_workspace/`, the prefix will be the project name.
+
+Then, you can check your `$GOPATH` and `$PATH`.
+
+#### Deactivate
 
 ```bash
-$ source gotool deactivate
-# OR use 'a' for short
-$ source gotool d
+source gotool deactivate
+
+# OR use 'd' for short
+source gotool d
+
 # OR
-$ source gotool exit
+source gotool exit
 ```
