@@ -1,0 +1,86 @@
+#!/bin/bash
+
+# -------------------------------------------
+# Author: ohmystack (jiangjun1990@gmail.com)
+# Date:   2015.11.26
+# -------------------------------------------
+
+usage() {
+  echo 'Golang Developer Tool'
+  echo 'Usage: source gotool [a|activate] [d|deactivate|exit]'
+}
+
+# Check whether this script is being sourced
+if [ "$_" = "$0" ]; then
+  SOURCED=false
+fi
+
+check_sourced() {
+  if [ "$SOURCED" = false ] ; then
+    echo '** Should run after "source" **'
+    echo 'Usage: source gotool [a|activate] [d|deactivate|exit]'
+    exit 1
+  fi
+}
+
+save_old() {
+  if [ -z "${_OLD_GOLANG_PATH}" ]; then
+    export _OLD_GOLANG_PATH=$PATH
+  fi
+  if [ -z "${_OLD_GOLANG_GOPATH}" ]; then
+    export _OLD_GOLANG_GOPATH=$GOPATH
+  fi
+  if [ -z "${_OLD_GOLANG_PS1}" ]; then
+    export _OLD_GOLANG_PS1=$PS1
+  fi
+}
+
+activate() {
+  check_sourced
+  work_dir=$(pwd)
+  if [ -d "$work_dir/src" ]; then
+    save_old
+    export PATH=$work_dir/bin:$PATH
+    export GOPATH=$work_dir:$GOPATH
+    try_parse_godeps_repo=${work_dir%Godeps/_workspace}
+    # Check if it is under Godeps
+    if [ ${#work_dir} != ${#try_parse_godeps_repo} ]; then
+      PS1="%{$FG[191]%}($(basename $try_parse_godeps_repo))%{$reset_color%}$PS1"
+    else
+      PS1="%{$FG[112]%}($(basename $(pwd)))%{$reset_color%}$PS1"
+    fi
+  else
+    echo "Invalid Go workspace. Cannot find 'src' directory here." >&2
+  fi
+}
+
+deactivate() {
+  check_sourced
+  if [ -n "${_OLD_GOLANG_PATH}" ]; then
+    export PATH=$_OLD_GOLANG_PATH
+  fi
+  if [ -n "${_OLD_GOLANG_GOPATH}" ]; then
+    export GOPATH=$_OLD_GOLANG_GOPATH
+  fi
+  if [ -n "${_OLD_GOLANG_PS1}" ]; then
+    export PS1=$_OLD_GOLANG_PS1
+  fi
+}
+
+if [ -z $1 ]; then
+  usage
+fi
+
+while [ -n $1 ]; do
+  case $1 in
+    'a' | 'activate') activate
+      ;;
+    'd' | 'deactivate' | 'exit') deactivate
+      ;;
+    '-h' | '--help') usage
+      ;;
+    *) break
+      ;;
+  esac
+  shift
+done
