@@ -35,6 +35,18 @@ save_old() {
   fi
 }
 
+get_shell_name() {
+  echo $(ps -p $$ | tail -1 | awk '{print $NF}')
+}
+
+set_ps1() {
+  if [ $(get_shell_name) = 'zsh' ]; then
+    PS1="%{$FG[$2]%}$1%{$reset_color%}$PS1"
+  else
+    PS1="$1$PS1"
+  fi
+}
+
 activate() {
   check_sourced
   work_dir=$(pwd)
@@ -45,9 +57,9 @@ activate() {
     try_parse_godeps_repo=${work_dir%Godeps/_workspace}
     # Check if it is under Godeps
     if [ ${#work_dir} != ${#try_parse_godeps_repo} ]; then
-      PS1="%{$FG[191]%}($(basename $try_parse_godeps_repo))%{$reset_color%}$PS1"
+      set_ps1 '($(basename $try_parse_godeps_repo))' 191
     else
-      PS1="%{$FG[112]%}($(basename $(pwd)))%{$reset_color%}$PS1"
+      set_ps1 '($(basename $(pwd)))' 112
     fi
   else
     echo "Invalid Go workspace. Cannot find 'src' directory here." >&2
