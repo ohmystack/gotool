@@ -8,6 +8,8 @@ It is greatly inspired by the `virtualenv` from Python.
 
 But here is only a small script. Cool, right?
 
+![recording](/docs/recording.gif)
+
 Feature
 =======
 
