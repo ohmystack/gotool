@@ -6,8 +6,12 @@
 # -------------------------------------------
 
 usage() {
-  echo 'Golang Developer Tool'
-  echo 'Usage: source gotool [a|activate] [d|deactivate|exit]'
+	cat <<-EOF
+		Golang Developer Tool
+		Usage:
+		  source gotool [a|activate]
+		  source gotool [d|deactivate|exit]
+	EOF
 }
 
 # Check whether this script is being sourced
