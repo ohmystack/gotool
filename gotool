@@ -44,10 +44,15 @@ get_shell_name() {
 }
 
 set_ps1() {
+	# Add a prefix text to PS1 with 256 color
+	# Usage: set_ps1 <text> <256-color-id>
+
 	if [ $(get_shell_name) = 'zsh' ]; then
 		export PS1="%{$FG[$2]%}$1%{$reset_color%}$PS1"
 	else
-		export PS1="$1$PS1"
+		dye=$(echo -e "\e[38;5;${2}m")
+		stop_dye=$(echo -e "\e[0m")
+		export PS1="$dye$1$stop_dye$PS1"
 	fi
 }
 
