@@ -58,11 +58,29 @@ set_ps1() {
 
 gotool::activate() {
 	check_sourced
+
+	local merge=false
+	while [ -n "$1" ]; do
+		case $1 in
+			'-m'|'--merge')
+				merge=true
+				;;
+			*)
+				break
+				;;
+		esac
+		shift
+	done
+
 	work_dir=$(pwd)
 	if [ -d "$work_dir/src" ]; then
 		save_old
+		if $merge ; then
+			export GOPATH=$work_dir:$GOPATH
+		else
+			export GOPATH=$work_dir
+		fi
 		export PATH=$work_dir/bin:$PATH
-		export GOPATH=$work_dir:$GOPATH
 		try_parse_godeps_repo=${work_dir%Godeps/_workspace}
 		try_parse_docker_vendor_repo=${work_dir%vendor}
 		# Check if it is under Godeps
@@ -100,16 +118,19 @@ fi
 
 while [ -n $1 ]; do
 	case $1 in
-		'a' | 'activate') gotool::activate
+		'a' | 'activate')
+			shift
+			gotool::activate "$@"
 			;;
-		'd' | 'deactivate' | 'exit') gotool::deactivate
+		'd' | 'deactivate' | 'exit')
+			shift
+			gotool::deactivate "$@"
 			;;
 		'-h' | '--help') usage
 			;;
 		*) break
 			;;
 	esac
-	shift
 done
 
 # Clear all the functions after running
